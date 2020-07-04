@@ -1,17 +1,21 @@
-# pull official base image
+# Pull official base image
 FROM python:3.8.3-alpine
 
-# set work directory
-WORKDIR /path/$DIRNAME
+MAINTAINER Jemart Pacilan
 
-# set environment variables
+# Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# install dependencies
+# Install dependencies
 RUN pip install --upgrade pip
-COPY ./requirements.txt .
-RUN pip install -r requirements.txt
+COPY ./requirements.txt /requirements.txt
+RUN pip install -r /requirements.txt
 
-# copy project
-COPY . /path/$DIRNAME
+RUN mkdir /app
+WORKDIR /app
+COPY ./app /app
+
+# Create user for this application
+RUN adduser -D user
+USER user
